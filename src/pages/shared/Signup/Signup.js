@@ -70,6 +70,7 @@ const Signup = () => {
                         </p>}
                         <Form.Check
                             className='w-50 mx-auto mb-3'
+                            name="custom-switch"
                             type="switch"
                             id="custom-switch"
                             label="Create account as a seller"

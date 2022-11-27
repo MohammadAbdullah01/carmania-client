@@ -7,9 +7,17 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import { Link, useNavigate } from "react-router-dom";
+import auth from '../../../firebase/firebase.init';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { signOut } from 'firebase/auth';
 
 const NavBar = () => {
     let navigate = useNavigate();
+    const [user, loading, error] = useAuthState(auth);
+    const logOut = () => {
+        signOut(auth);
+        localStorage.removeItem("accessToken")
+    }
     return (
         <>
             {['md'].map((expand) => (
@@ -31,9 +39,15 @@ const NavBar = () => {
                                 <Nav className="justify-content-end flex-grow-1 pe-3">
                                     <Nav.Link as={Link} to='/'>Home</Nav.Link>
                                     <Nav.Link as={Link} to="/blogs">Blog</Nav.Link>
-                                    <Button onClick={() => navigate("/login")} className='ms-2' variant="outline-success">
-                                        Login
-                                    </Button>
+                                    {user ?
+                                        <Button onClick={logOut} className='ms-2' variant="outline-success">
+                                            log out
+                                        </Button>
+                                        :
+                                        <Button onClick={() => navigate("/login")} className='ms-2' variant="outline-success">
+                                            Login
+                                        </Button>
+                                    }
                                 </Nav>
                             </Offcanvas.Body>
                         </Navbar.Offcanvas>
