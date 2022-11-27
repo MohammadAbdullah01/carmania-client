@@ -1,32 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
 import toast, { Toaster } from 'react-hot-toast';
 import auth from '../../../firebase/firebase.init';
-import facebook from '../../../assets/images/facebook.png'
 import google from '../../../assets/images/google.png'
 import './Login.css'
 
 // import React, { useEffect, useRef, useState } from 'react';
 // import './Login.css'
-import { useSendPasswordResetEmail, useSignInWithEmailAndPassword, useSignInWithFacebook, useSignInWithGoogle } from 'react-firebase-hooks/auth';
+import { useSendPasswordResetEmail, useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Spinner } from 'react-bootstrap';
 import useToken from '../../../hooks/useToken';
-// import { Navigate, useLocation, useNavigate } from 'react-router-dom';
-// import auth from '../../../firebase/firebase.init';
-// import useToken from '../../../hooks/useToken';
-// import google from '../../../images/social/google.png'
-// import facebook from '../../../images/social/facebook.png'
-// import toast, { Toaster } from 'react-hot-toast';
-// import { signInWithEmailAndPassword } from 'firebase/auth';
-// import { Spinner } from 'react-bootstrap';
 
 const Login = () => {
 
     const [emailPassUser, setEmailPassUser] = useState({})
     const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
-    const [signInWithFacebook, user1, loading1, error1] = useSignInWithFacebook(auth);
+
 
     const [
         signInWithEmailAndPassword,
@@ -38,21 +27,21 @@ const Login = () => {
     const emailRef = useRef("")
     const location = useLocation()
     const navigate = useNavigate()
-    const [token, setToken] = useToken(user || user1 || user2)
+    const [token, setToken] = useToken(user || user2)
     let from = location.state?.from?.pathname || "/";
     useEffect(() => {
-        if (user || user1 || user2) {
+        if (token) {
             navigate(from, { replace: true });
         }
-    }, [user, user1, user2])
+    }, [user, user2])
     const [sendPasswordResetEmail, sending, error3] = useSendPasswordResetEmail(
         auth
     );
     useEffect(() => {
-        if (error || error1 || error2) {
+        if (error || error2) {
             console.log()
         }
-    }, [error, error1, error2])
+    }, [error, error2])
 
     useEffect(() => {
         if (error2?.message?.includes("auth/user-not-found")) {
@@ -61,9 +50,9 @@ const Login = () => {
         if (error2?.message?.includes("auth/wrong-password")) {
             toast.error("wrong password", { id: "19" })
         }
-    }, [error, error1, error2])
+    }, [error, error2])
 
-    const handleLogin = event => {
+    const handleLogin = async (event) => {
         event.preventDefault()
         const email = event.target.email.value;
         const password = event.target.password.value;
@@ -76,7 +65,8 @@ const Login = () => {
             toast.error('password length too short', { id: "2" })
             return;
         }
-        signInWithEmailAndPassword(email, password)
+        await signInWithEmailAndPassword(email, password);
+
 
     }
 
@@ -96,7 +86,7 @@ const Login = () => {
                             <label htmlFor="password">Enter Your Password</label>
                             <input type="password" name="password" id="password" required />
                         </div>
-                        {(loading || loading1 || loading2) && <p>
+                        {(loading || loading2) && <p>
                             <Spinner animation="border" variant="success" />
                         </p>}
                         <input className='login-btn' type="submit" value="Login" />
@@ -112,7 +102,6 @@ const Login = () => {
                     }}>Reset</span></p><p>Don't have an account? <span style={{ cursor: "pointer", color: "orange" }} onClick={() => navigate('/signup')}>Sign up</span></p></div>
                 </div>
                 <button className='social-login' onClick={() => signInWithGoogle()}> <img style={{ height: "25px", marginBottom: "2px", marginRight: "5px" }} src={google} alt="" /> Continue with google</button>
-                <button className='social-login' onClick={() => signInWithFacebook()} ><img style={{ height: "20px", marginBottom: "4px", marginRight: "5px" }} src={facebook} alt="" /> Continue with facebook</button>
             </div>
         </div>
     );
@@ -120,31 +109,3 @@ const Login = () => {
 
 export default Login;
 
-
-
-// function BasicExample() {
-//   return (
-//     <Form>
-//       <Form.Group className="mb-3" controlId="formBasicEmail">
-//         <Form.Label>Email address</Form.Label>
-//         <Form.Control type="email" placeholder="Enter email" />
-//         <Form.Text className="text-muted">
-//           We'll never share your email with anyone else.
-//         </Form.Text>
-//       </Form.Group>
-
-//       <Form.Group className="mb-3" controlId="formBasicPassword">
-//         <Form.Label>Password</Form.Label>
-//         <Form.Control type="password" placeholder="Password" />
-//       </Form.Group>
-//       <Form.Group className="mb-3" controlId="formBasicCheckbox">
-//         <Form.Check type="checkbox" label="Check me out" />
-//       </Form.Group>
-//       <Button variant="primary" type="submit">
-//         Submit
-//       </Button>
-//     </Form>
-//   );
-// }
-
-// export default BasicExample;

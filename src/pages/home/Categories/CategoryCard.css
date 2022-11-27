@@ -1,0 +1,31 @@
+.show-all-btn {
+    background-color: white;
+    border: none;
+    font-weight: bold;
+    transition: all 0.5s;
+    width: 220px;
+    text-align: center;
+    height: 50px;
+    font-size: 25px;
+    transition: display 5s;
+    background-color: rgb(147, 14, 224);
+    color: white;
+    position: absolute;
+    bottom: 0;
+    ;
+    left: 0;
+    width: 100%;
+
+}
+
+.category-name {
+    -webkit-clip-path: polygon(11% 0, 76% 0, 100% 30%, 100% 80%, 70% 100%, 30% 100%, 0 96%, 0% 30%);
+    clip-path: polygon(11% 0, 76% 0, 100% 30%, 100% 80%, 70% 100%, 30% 100%, 0 96%, 0% 30%);
+    background-color: rgb(182, 163, 78);
+    width: 100%s;
+}
+
+.show-all-btn:hover {
+    background-color: rgb(107, 10, 163);
+
+}

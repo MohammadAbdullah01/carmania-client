@@ -10,6 +10,8 @@ import Signup from './pages/shared/Signup/Signup';
 import { Toaster } from 'react-hot-toast';
 import Blogs from './pages/Blogs/Blogs';
 import NotFound from './pages/shared/NotFound/NotFound';
+import RequireAuth from './pages/shared/RequireAuth/RequireAuth';
+import Cars from './pages/home/Cars.js/Cars';
 
 function App() {
   return (
@@ -21,7 +23,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/blogs" element={<Blogs />} />
+          <Route path="/blogs" element={<RequireAuth><Blogs /></RequireAuth>} />
+          <Route path="/category/:cartCategory" element={<RequireAuth><Cars /></RequireAuth>} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />

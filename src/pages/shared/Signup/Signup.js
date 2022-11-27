@@ -1,16 +1,24 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useLocation, useNavigate } from 'react-router-dom';
 import auth from '../../../firebase/firebase.init';
 import useToken from '../../../hooks/useToken';
-import facebook from '../../../assets/images/facebook.png'
 import google from '../../../assets/images/google.png'
-import { useCreateUserWithEmailAndPassword, useSignInWithFacebook, useSignInWithGoogle } from 'react-firebase-hooks/auth';
+import { useCreateUserWithEmailAndPassword, useSignInWithGoogle, useUpdateProfile } from 'react-firebase-hooks/auth';
 import { Form, Spinner } from 'react-bootstrap';
 
 const Signup = () => {
+    const [userOrSeller, setUserOrSeller] = useState("user")
+    const [userName, setUserName] = useState('')
+    const seeCondition = () => {
+        if (userOrSeller == "user") {
+            setUserOrSeller("seller")
+        } else {
+            setUserOrSeller("user")
+        }
+    }
     const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
-    const [signInWithFacebook, user1, loading1, error1] = useSignInWithFacebook(auth);
+
     const [
         createUserWithEmailAndPassword,
         user2,
@@ -19,18 +27,20 @@ const Signup = () => {
     ] = useCreateUserWithEmailAndPassword(auth, { sendEmailVerification: true });
     const location = useLocation()
     const navigate = useNavigate()
-    const [token] = useToken(user || user1 || user2)
+    const [token] = useToken(user || user2, userOrSeller)
     let from = location.state?.from?.pathname || "/";
     useEffect(() => {
-        if (user || user1 || user2) {
+        if (token) {
             navigate(from, { replace: true });
         }
-    }, [user, user1, user2])
-    const handleRegister = (event) => {
+    }, [user, user2, from, navigate, token])
+    const [updateProfile, updating, nameError] = useUpdateProfile(auth);
+
+    const handleRegister = async (event) => {
         event.preventDefault()
         const email = event.target.email.value;
         const password = event.target.password.value;
-
+        const name = event.target.name.value;
         if (!/\S+@\S+\.\S+/.test(email)) {
             toast.error('please give a proper email address', { id: "2" })
             return;
@@ -39,14 +49,16 @@ const Signup = () => {
             toast.error('password length too short', { id: "2" })
             return;
         }
-
-        createUserWithEmailAndPassword(email, password)
+        await createUserWithEmailAndPassword(email, password);
+        await updateProfile({ displayName: name })
     }
     useEffect(() => {
-        if (error?.message?.includes("auth/email-already-in-use") || error1?.message?.includes("auth/email-already-in-use") || error2?.message?.includes("auth/email-already-in-use")) {
+        if (error?.message?.includes("auth/email-already-in-use") || error2?.message?.includes("auth/email-already-in-use")) {
             toast.error("user already exist", { id: "15" })
         }
-    }, [error, error1, error2])
+    }, [error, error2])
+    console.log(user?.user?.displayName || user2);
+
     return (
         <div className='login-container'>
             <div className='form-container'>
@@ -55,7 +67,7 @@ const Signup = () => {
                     <form onSubmit={handleRegister}>
                         <div className='form-input-group'>
                             <label htmlFor="name">Enter Your Name</label>
-                            <input type="text" name="name" id="name" required />
+                            <input onChange={(e) => setUserName(e.target.value)} type="text" name="name" id="name" required />
                         </div>
                         <div className='form-input-group'>
                             <label htmlFor="email">Enter Your Email</label>
@@ -65,12 +77,12 @@ const Signup = () => {
                             <label htmlFor="password">Enter Your Password</label>
                             <input type="password" name="password" id="password" required />
                         </div>
-                        {(loading || loading1 || loading2) && <p>
+                        {(loading || loading2) && <p>
                             <Spinner animation="border" variant="success" />
                         </p>}
                         <Form.Check
+                            onClick={seeCondition}
                             className='w-50 mx-auto mb-3'
-                            name="custom-switch"
                             type="switch"
                             id="custom-switch"
                             label="Create account as a seller"
@@ -80,7 +92,6 @@ const Signup = () => {
                     <div className='login-mechanism'><p>Already have an account? <span onClick={() => navigate('/login')} style={{ color: "orange", cursor: "pointer" }}>Login</span></p></div>
                 </div>
                 <button className='social-login' onClick={() => signInWithGoogle()}> <img style={{ height: "25px", marginBottom: "2px", marginRight: "5px" }} src={google} alt="" /> Continue with google</button>
-                <button className='social-login' onClick={() => signInWithFacebook()} ><img style={{ height: "20px", marginBottom: "4px", marginRight: "5px" }} src={facebook} alt="" /> Continue with facebook</button>
             </div>
         </div>
     );

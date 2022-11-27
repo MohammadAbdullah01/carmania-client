@@ -8,7 +8,7 @@ import './HowWork.css'
 const HowWork = () => {
     return (
         <div className='my-5'>
-            <h1 className='text-center mb-5'>How Car Mania Work?</h1>
+            <h1 className='text-center pt-5 mb-5'>How Car Mania Work?</h1>
             <Row>
                 <Col className="d-flex flex-column justify-content-between mb-3" sm={12} md={6} lg={4}>
                     <div>
