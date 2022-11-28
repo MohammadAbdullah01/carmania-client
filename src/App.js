@@ -12,6 +12,8 @@ import Blogs from './pages/Blogs/Blogs';
 import NotFound from './pages/shared/NotFound/NotFound';
 import RequireAuth from './pages/shared/RequireAuth/RequireAuth';
 import Cars from './pages/home/Cars.js/Cars';
+import Dashboard from './pages/Dashboard/Dashboard';
+import MyOrders from './pages/Dashboard/MyOrders';
 
 function App() {
   const products = [
@@ -136,6 +138,9 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/blogs" element={<RequireAuth><Blogs /></RequireAuth>} />
+          <Route path="/dashboard" element={<RequireAuth><Dashboard /></RequireAuth>} >
+            <Route index element={<MyOrders />}></Route>
+          </Route>
           <Route path="/category/:cartCategory" element={<RequireAuth><Cars /></RequireAuth>} />
           <Route path="*" element={<NotFound />} />
         </Routes>

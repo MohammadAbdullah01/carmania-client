@@ -39,6 +39,7 @@ const NavBar = () => {
                                 <Nav className="justify-content-end flex-grow-1 pe-3">
                                     <Nav.Link as={Link} to='/'>Home</Nav.Link>
                                     <Nav.Link as={Link} to="/blogs">Blog</Nav.Link>
+                                    <Nav.Link as={Link} to="/dashboard">Dashboard</Nav.Link>
                                     {user ?
                                         <Button onClick={logOut} className='ms-2' variant="outline-success">
                                             log out
