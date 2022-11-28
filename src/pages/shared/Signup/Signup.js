@@ -57,7 +57,6 @@ const Signup = () => {
             toast.error("user already exist", { id: "15" })
         }
     }, [error, error2])
-    console.log(user?.user?.displayName || user2);
 
     return (
         <div className='login-container'>

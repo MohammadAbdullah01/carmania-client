@@ -30,7 +30,7 @@ const Login = () => {
     const [token, setToken] = useToken(user || user2)
     let from = location.state?.from?.pathname || "/";
     useEffect(() => {
-        if (token) {
+        if (user || user2) {
             navigate(from, { replace: true });
         }
     }, [user, user2])

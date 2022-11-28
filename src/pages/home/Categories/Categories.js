@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Col, Row } from 'react-bootstrap';
+import { Row } from 'react-bootstrap';
 import CategoryCard from './CategoryCard';
 
 const Categories = () => {
@@ -23,6 +23,7 @@ const Categories = () => {
             nameForBtn: "electric"
         }
     ]
+
     return (
         <div>
             <h1 className='text-center pt-5 pb-2'>Choose your category to find your desired car!</h1>

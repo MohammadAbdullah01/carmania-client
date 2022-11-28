@@ -3,8 +3,9 @@ import { Card, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import './CategoryCard.css'
 
-const CategoryCard = ({ category }) => {
+const CategoryCard = ({ category, cars }) => {
     const navigate = useNavigate()
+
     const { name, img, nameForBtn } = category;
     return (
         <Col className='mt-2 category-card' sm={12} md={6} lg={4}>
