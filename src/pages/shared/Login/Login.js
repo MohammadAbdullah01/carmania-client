@@ -10,8 +10,9 @@ import { useSendPasswordResetEmail, useSignInWithEmailAndPassword, useSignInWith
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Spinner } from 'react-bootstrap';
 import useToken from '../../../hooks/useToken';
+import { reload } from 'firebase/auth';
 
-const Login = () => {
+const Login = ({ reLoad, setReload }) => {
 
     const [emailPassUser, setEmailPassUser] = useState({})
     const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
@@ -70,7 +71,10 @@ const Login = () => {
 
     }
 
-
+    const handleSignInWithGoogle = () => {
+        signInWithGoogle()
+        setReload(!reLoad)
+    }
     return (
         <div className='login-container'>
             <Toaster />
@@ -89,7 +93,8 @@ const Login = () => {
                         {(loading || loading2) && <p>
                             <Spinner animation="border" variant="success" />
                         </p>}
-                        <input className='login-btn' type="submit" value="Login" />
+                        {/* <input className='login-btn' type="submit" value="Login" /> */}
+                        <button className='login-btn' type="submit" value="Login" >Login</button>
                     </form>
 
                     <div className='login-mechanism'><p>Forgot Password? <span style={{ cursor: "pointer", color: "orange" }} onClick={async () => {
@@ -101,7 +106,7 @@ const Login = () => {
                         }
                     }}>Reset</span></p><p>Don't have an account? <span style={{ cursor: "pointer", color: "orange" }} onClick={() => navigate('/signup')}>Sign up</span></p></div>
                 </div>
-                <button className='social-login' onClick={() => signInWithGoogle()}> <img style={{ height: "25px", marginBottom: "2px", marginRight: "5px" }} src={google} alt="" /> Continue with google</button>
+                <button className='social-login' onClick={handleSignInWithGoogle}> <img style={{ height: "25px", marginBottom: "2px", marginRight: "5px" }} src={google} alt="" /> Continue with google</button>
             </div>
         </div>
     );

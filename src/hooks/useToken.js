@@ -6,7 +6,8 @@ const useToken = (user, userOrSeller = "user") => {
     useEffect(() => {
         if (email) {
             const currentUser = { email: email, role: userOrSeller }
-            fetch(`http://localhost:5000/users/${email}`, {
+            // fetch(`https://carmania-server-render.onrender.com/users/${email}`, {
+            fetch(`https://carmania-server-render.onrender.com/users/${email}`, {
                 method: "put",
                 headers: {
                     'content-type': "application/json"

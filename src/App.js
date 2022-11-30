@@ -14,6 +14,17 @@ import RequireAuth from './pages/shared/RequireAuth/RequireAuth';
 import Cars from './pages/home/Cars.js/Cars';
 import Dashboard from './pages/Dashboard/Dashboard';
 import MyOrders from './pages/Dashboard/MyOrders';
+import RequireAdmin from './pages/shared/RequireAuth/RequireAdmin';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import auth from './firebase/firebase.init';
+import useRole from './hooks/useRole';
+import MyCars from './pages/Dashboard/MyCars';
+import AddCar from './pages/Dashboard/AddCar';
+import { useEffect, useState } from 'react';
+import RequireSeller from './pages/shared/RequireAuth/RequireSeller';
+import RequireUser from './pages/shared/RequireAuth/RequireUser';
+import ViewAllSellers from './pages/Dashboard/ViewAllSellers';
+import ViewAllBuyers from './pages/Dashboard/ViewAllBuyers';
 
 function App() {
   const products = [
@@ -27,7 +38,9 @@ function App() {
       yearsOfUse: 5,
       postDate: "22-11-2022",
       location: "Nawabgonj, Dhaka",
-      sellerEmail: "mohammadabdullah@gmail.com"
+      sellerEmail: "mohammadabdullah@gmail.com",
+      sold: false,
+      advertised: false
     },
     {
       name: "VW Camper Van",
@@ -39,7 +52,9 @@ function App() {
       yearsOfUse: 2,
       postDate: "30-10-2022",
       location: "Bandura, Barisal",
-      sellerEmail: "mustak@gmail.com"
+      sellerEmail: "mustak@gmail.com",
+      sold: false,
+      advertised: false
     },
     {
       name: "Volkswagen",
@@ -51,7 +66,9 @@ function App() {
       yearsOfUse: 2,
       postDate: "26-10-2022",
       location: "85-LA, New York",
-      sellerEmail: "minhaz@gmail.com"
+      sellerEmail: "minhaz@gmail.com",
+      sold: false,
+      advertised: false
     },
 
     {
@@ -64,7 +81,9 @@ function App() {
       yearsOfUse: 3,
       postDate: "20-10-2022",
       location: "Nawabgonj, Dhaka",
-      sellerEmail: "mohammadabdullah@gmail.com"
+      sellerEmail: "mohammadabdullah@gmail.com",
+      sold: false,
+      advertised: false
     },
     {
       name: "Hava Driven",
@@ -76,7 +95,9 @@ function App() {
       yearsOfUse: 1,
       postDate: "1-09-2022",
       location: "Bandura, Barisal",
-      sellerEmail: "mustak@gmail.com"
+      sellerEmail: "mustak@gmail.com",
+      sold: false,
+      advertised: false
     },
     {
       name: "Singuls-300",
@@ -88,7 +109,9 @@ function App() {
       yearsOfUse: 3,
       postDate: "20-10-2022",
       location: "85-LA, New York",
-      sellerEmail: "minhaz@gmail.com"
+      sellerEmail: "minhaz@gmail.com",
+      sold: false,
+      advertised: false
     },
 
     {
@@ -101,7 +124,9 @@ function App() {
       yearsOfUse: 1,
       postDate: "30-08-2022",
       location: "Nawabgonj, Dhaka",
-      sellerEmail: "mohammadabdullah@gmail.com"
+      sellerEmail: "mohammadabdullah@gmail.com",
+      sold: false,
+      advertised: false
     },
     {
       name: "Falcon MS",
@@ -113,7 +138,9 @@ function App() {
       yearsOfUse: 2,
       postDate: "15-06-2022",
       location: "Bandura, Barisal",
-      sellerEmail: "mustak@gmail.com"
+      sellerEmail: "mustak@gmail.com",
+      sold: false,
+      advertised: false
     },
     {
       name: "Eagle 5N",
@@ -125,9 +152,27 @@ function App() {
       yearsOfUse: 1,
       postDate: "05-11-2022",
       location: "85-LA, New York",
-      sellerEmail: "minhaz@gmail.com"
+      sellerEmail: "minhaz@gmail.com",
+      sold: false,
+      advertised: false
     }
   ]
+  const [reLoad, setReload] = useState(false)
+  const [user, loading, error] = useAuthState(auth);
+  const [userRole, userLoading] = useRole(user, reLoad, setReload);
+  const [thisRouteReload, setThisRouteReload] = useState(false)
+  useEffect(() => {
+    fetch(`https://carmania-server-render.onrender.com/orders/{user.?email}`)
+      .then(res => res.json())
+      .then(data => {
+        setThisRouteReload(!thisRouteReload)
+      })
+    fetch(`https://carmania-server-render.onrender.com/sellercars/${user?.email}`)
+      .then(res => res.json())
+      .then(data => {
+        setThisRouteReload(!thisRouteReload)
+      })
+  }, [user, userRole])
   return (
     <>
       <Container className="App">
@@ -135,12 +180,31 @@ function App() {
 
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/blogs" element={<RequireAuth><Blogs /></RequireAuth>} />
-          <Route path="/dashboard" element={<RequireAuth><Dashboard /></RequireAuth>} >
+          <Route path="/login" element={<Login reLoad={reLoad} setReload={setReload} />} />
+          <Route path="/signup" element={<Signup reLoad={reLoad} setReload={setReload} />} />
+          <Route path="/blogs" element={<Blogs />} />
+          {/* dashboard for users  */}
+          {userRole == "user" && <> <Route path="/dashboard" element={<RequireAuth><Dashboard /></RequireAuth>} >
+            <Route index element={<RequireUser><MyOrders /></RequireUser>}></Route>
+          </Route> </>}
+          {/* dashboard for sellers  */}
+          {userRole == "seller" && <> <Route path="/dashboard" element={<RequireAuth><Dashboard /></RequireAuth>} >
+            <Route index element={<RequireSeller><MyCars /></RequireSeller>}></Route>
+            <Route path="AddCar" element={<RequireSeller><AddCar /></RequireSeller>}></Route>
+          </Route> </>}
+          {/* dashboard for admin  */}
+          {userRole == "admin" && <> <Route path="/dashboard" element={<RequireAuth><Dashboard /></RequireAuth>} >
+            <Route index element={<RequireAdmin><ViewAllSellers /></RequireAdmin>}></Route>
+            <Route path="allbuyers" element={<RequireAdmin><ViewAllBuyers /></RequireAdmin>}></Route>
+          </Route> </>}
+
+          {/* <Route path="/dashboard" element={<RequireAuth><Dashboard /></RequireAuth>} >
             <Route index element={<MyOrders />}></Route>
-          </Route>
+            <Route index element={<MyCars />}></Route>
+            <Route path="addcar" element={<AddCar />}></Route>
+          </Route> */}
+
+
           <Route path="/category/:cartCategory" element={<RequireAuth><Cars /></RequireAuth>} />
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -13,7 +13,7 @@ const BookingModal = ({ show, handleClose, selectedCar }) => {
         const phone = e.target.phone.value;
         const locationOfMeeting = e.target.locmeet.value;
         console.log(phone, locationOfMeeting);
-        fetch('http://localhost:5000/orders', {
+        fetch('https://carmania-server-render.onrender.com/orders', {
             method: 'POST',
             body: JSON.stringify({
                 car: selectedCar,

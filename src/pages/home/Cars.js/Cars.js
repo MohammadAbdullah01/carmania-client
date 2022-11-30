@@ -6,12 +6,13 @@ import BookingModal from './BookingModal';
 import Car from './Car';
 
 const Cars = () => {
+
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const [selectedCar, setSelecTedCar] = useState({})
     const { cartCategory } = useParams()
-    const { isLoading, error, data, refetch } = useQuery('carscollection', () => fetch(`http://localhost:5000/cars/${cartCategory}`).then(res => res.json()))
+    const { isLoading, error, data, refetch } = useQuery(['carscollection', cartCategory], () => fetch(`https://carmania-server-render.onrender.com/cars/${cartCategory}`).then(res => res.json()))
     if (isLoading) {
         return <p className='mt-5 text-center'>Loading...</p>
     }

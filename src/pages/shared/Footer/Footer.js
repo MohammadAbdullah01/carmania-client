@@ -3,24 +3,24 @@ import './Footer.css'
 
 const Footer = () => {
     return (
-        <footer class="footer">
-            <div class="footer__addr">
-                <h1 class="footer__logo">Car Mania</h1>
+        <footer className="footer">
+            <div className="footer__addr">
+                <h1 className="footer__logo">Car Mania</h1>
 
                 <h2>Contact</h2>
 
                 <address>
                     Nawabganj, Dhaka - 1320, Bangladesh<br />
 
-                    <a class="footer__btn" href="mailto:example@gmail.com">Email Us</a>
+                    <a className="footer__btn" href="mailto:example@gmail.com">Email Us</a>
                 </address>
             </div>
 
-            <ul class="footer__nav">
-                <li class="nav__item">
-                    <h2 class="nav__title">Media</h2>
+            <ul className="footer__nav">
+                <li className="nav__item">
+                    <h2 className="nav__title">Media</h2>
 
-                    <ul class="nav__ul">
+                    <ul className="nav__ul">
                         <li>
                             <a href="#">Online</a>
                         </li>
@@ -35,10 +35,10 @@ const Footer = () => {
                     </ul>
                 </li>
 
-                <li class="nav__item nav__item--extra">
-                    <h2 class="nav__title">Technology</h2>
+                <li className="nav__item nav__item--extra">
+                    <h2 className="nav__title">Technology</h2>
 
-                    <ul class="nav__ul nav__ul--extra">
+                    <ul className="nav__ul nav__ul--extra">
                         <li>
                             <a href="#">Hardware Design</a>
                         </li>
@@ -65,10 +65,10 @@ const Footer = () => {
                     </ul>
                 </li>
 
-                <li class="nav__item">
-                    <h2 class="nav__title">Legal</h2>
+                <li className="nav__item">
+                    <h2 className="nav__title">Legal</h2>
 
-                    <ul class="nav__ul">
+                    <ul className="nav__ul">
                         <li>
                             <a href="#">Privacy Policy</a>
                         </li>
@@ -84,11 +84,11 @@ const Footer = () => {
                 </li>
             </ul>
 
-            <div class="legal">
+            <div className="legal">
                 <p>&copy; 2023 Something. All rights reserved.</p>
 
-                <div class="legal__links">
-                    {/* <span>Made with <span class="heart">♥</span> remotely from Anywhere</span> */}
+                <div className="legal__links">
+                    {/* <span>Made with <span className="heart">♥</span> remotely from Anywhere</span> */}
                 </div>
             </div>
         </footer>

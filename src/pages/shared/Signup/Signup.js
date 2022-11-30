@@ -7,7 +7,7 @@ import google from '../../../assets/images/google.png'
 import { useCreateUserWithEmailAndPassword, useSignInWithGoogle, useUpdateProfile } from 'react-firebase-hooks/auth';
 import { Form, Spinner } from 'react-bootstrap';
 
-const Signup = () => {
+const Signup = ({ reLoad, setReload }) => {
     const [userOrSeller, setUserOrSeller] = useState("user")
     const [userName, setUserName] = useState('')
     const seeCondition = () => {
@@ -57,7 +57,10 @@ const Signup = () => {
             toast.error("user already exist", { id: "15" })
         }
     }, [error, error2])
-
+    const handleSignInWithGoogle = () => {
+        signInWithGoogle()
+        setReload(!reLoad)
+    }
     return (
         <div className='login-container'>
             <div className='form-container'>
@@ -90,7 +93,7 @@ const Signup = () => {
                     </form>
                     <div className='login-mechanism'><p>Already have an account? <span onClick={() => navigate('/login')} style={{ color: "orange", cursor: "pointer" }}>Login</span></p></div>
                 </div>
-                <button className='social-login' onClick={() => signInWithGoogle()}> <img style={{ height: "25px", marginBottom: "2px", marginRight: "5px" }} src={google} alt="" /> Continue with google</button>
+                <button className='social-login' onClick={handleSignInWithGoogle}> <img style={{ height: "25px", marginBottom: "2px", marginRight: "5px" }} src={google} alt="" /> Continue with google</button>
             </div>
         </div>
     );
